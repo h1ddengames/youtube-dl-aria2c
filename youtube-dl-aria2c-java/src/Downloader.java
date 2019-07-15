@@ -7,7 +7,7 @@ import java.util.Properties;
  * This script was created by Shahid Karim on 7/15/19.
  */
 public class Downloader {
-    private static String scriptVersion = "0.2a";
+    private static String scriptVersion = "0.3a";
     private static String downloadFile = "";
     private static String downloadLocation = "";
     private static int numberOfThreads = 1;
@@ -76,5 +76,30 @@ public class Downloader {
 
     public static void main(String[] args) {
         checkArguments(args);
+
+        try {
+            final Process p = Runtime.getRuntime().exec("cmd /c ipconfig");
+            new Thread(new Runnable() {
+                public void run() {
+                    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    String line = null;
+
+                    try {
+                        while ((line = input.readLine()) != null)
+                            System.out.println(line);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+            try {
+                p.waitFor();
+            } catch (Exception e) {
+                System.out.println("Timed out.");
+            }
+        } catch (Exception e) {
+            System.out.println("Could not run the executable.");
+        }
     }
 }
