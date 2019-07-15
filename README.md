@@ -29,7 +29,7 @@ In order to use the Python script:
 In order to use the Java script:
 1. Add Java 8 or Java 11 to your PATH. Youtube-dl and Aria2c have been added to the repository so you will not need to have it in your PATH.
 2. Clone this repository.
-3. Open a command prompt in the youtube-dl-aria2c-java/src folder.
+3. Open a command prompt in the folder that was cloned.
 4. Run the script using the following command format:
 
     This command will use the txt file located at C:/DL.txt to know which URLs contain the media you wan to download. It will then save the media to C:/Video Downloads and will use 5 threads in order to do so.
