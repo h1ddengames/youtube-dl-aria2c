@@ -1,7 +1,7 @@
 # youtube-dl-aria2c
 A command line wrapper written in both Python and Java that uses Youtube-dl and Aria2c to download videos when given a file that contains URLs.
 
-The script will download the best version available based on what Youtube-dl can find. The filename will be restricted to ASCII only and be below 260 characters in length. The filename will also be the title of the video + the number identifier given by the website. The options used for Aria2c are listed below:
+The script will download the best version available based on what Youtube-dl can find. The filename will be restricted to ASCII characters only and avoid "&" and spaces. The filename will also be the title of the video + the number identifier given by the website. The options used for Aria2c are listed below:
 
     # Start downloading the media file using aria2c
     # -x The maximum number of connections to one server for each download
@@ -33,8 +33,13 @@ In order to use the Java script:
 4. Run the script using the following command format:
 
     This command will use the txt file located at C:/DL.txt to know which URLs contain the media you wan to download. It will then save the media to C:/Video Downloads and will use 5 threads in order to do so.
-    ```
-    py downloader.py "C:/DL.txt" "C:/Video Downloads" 5
-    ```
 
-    The amount of threads can be as low as 1 and as high as the amount of threads your computer can handle.
+    ```
+    java Downloader.java "C:/DL.txt" "C:/Video Downloads" 5
+
+    # java - The executable: uses java to run this script.
+    # Downloader.java - The name of this script. Tells Java to run this script.
+    # "C:/DL.txt" - Place the " " (quotation marks) around the location that contains your txt file that contains the URLs to download.
+    # "C:/Video Downloads" - Place the " " (quotation marks) around the location where you want to save the media files.
+    # 5 - A number between 1 and the maximum number of threads your cpu allows.
+    ```

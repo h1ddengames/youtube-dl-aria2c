@@ -7,5 +7,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/hsqldb-2.5.0/hsqldb/src" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a780540b-eac5-4a2a-b3dd-5b5ac563baa4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/youtube-dl-aria2c.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/youtube-dl-aria2c.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/youtube-dl-aria2c.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Downloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/Downloader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Youtubedl/youtube-dl.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Youtubedl/youtube-dl.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube-dl-aria2c-java/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube-dl-aria2c-java/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube-dl-aria2c-java/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube-dl-aria2c-java/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube-dl-aria2c-java/Downloader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube-dl-aria2c-java/youtube-dl-aria2c-java.iml" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Downloader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="96" column="56" lean-forward="true" selection-start-line="96" selection-start-column="56" selection-end-line="96" selection-end-column="56" />
+            <state relative-caret-position="571">
+              <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -51,8 +43,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="76" />
-    <option name="y" value="30" />
+    <option name="x" value="114" />
+    <option name="y" value="16" />
     <option name="width" value="1771" />
     <option name="height" value="1007" />
   </component>
@@ -71,18 +63,11 @@
             <path>
               <item name="youtube-dl-aria2c" type="b2602c69:ProjectViewProjectNode" />
               <item name="youtube-dl-aria2c" type="462c0819:PsiDirectoryNode" />
-              <item name="PhantomJS" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="youtube-dl-aria2c" type="b2602c69:ProjectViewProjectNode" />
-              <item name="youtube-dl-aria2c" type="462c0819:PsiDirectoryNode" />
-              <item name="PhantomJS" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="youtube-dl-aria2c" type="b2602c69:ProjectViewProjectNode" />
-              <item name="youtube-dl-aria2c" type="462c0819:PsiDirectoryNode" />
-              <item name="Youtubedl" type="462c0819:PsiDirectoryNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -95,7 +80,10 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/hsqldb-2.5.0/hsqldb/src/org/hsqldb/jdbc" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -108,6 +96,20 @@
         </RuleState>
       </list>
     </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Downloader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Downloader" />
+      <module name="youtube-dl-aria2c" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Downloader" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -123,7 +125,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="76" y="30" width="1771" height="1007" extended-state="0" />
+    <frame x="114" y="16" width="1771" height="1007" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1408533" />
@@ -134,7 +136,7 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32900944" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -156,13 +158,85 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Downloader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="96" column="56" lean-forward="true" selection-start-line="96" selection-start-column="56" selection-end-line="96" selection-end-column="56" />
+        <state relative-caret-position="571">
+          <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>youtube-dl-aria2c</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
