@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * This script was created by Shahid Karim on 7/15/19.
  * Sample usage: java Downloader.java "C:/DL.txt" "C:/Video Downloads" 5
+ * Sample usage: java Downloader.java -h
  * java - The executable: uses java to run this script.
  * Downloader.java - The name of this script. Tells Java to run this script.
  * "C:/DL.txt" - Place the " " (quotation marks) around the location that contains your txt file that contains the URLs to download.
@@ -12,29 +13,39 @@ import java.util.List;
  * 5 - A number between 1 and the maximum number of threads your cpu allows.
  */
 public class Downloader {
-    private static String scriptVersion = "0.6a";
+    private static String scriptVersion = "0.7a";
+    // The .txt file containing a single URL on each line.
+    // Look at DLExample.txt in the /resources folder for an example.
     private static String downloadFile;
+    // The location where the media files should be downloaded.
     private static String downloadLocation;
+    // How many threads should be used to speed up the download of all the media in the downloadFile.
     private static int numberOfThreads = 1;
 
+    // The location of the executables required to download the media files.
     private static String YOUTUBE_DL_LOCATION;
     private static String PHANTOM_JS_LOCATION;
     private static String ARIA_2C_LOCATION;
 
-    private static List<String> urlsToDownload = new ArrayList<>();
+    // Store the URLs from the downloadFile into an ArrayList in memory.
+    private static List<String> urlsToDownload = new ArrayList<String>();
 
-    private static void printRequiredArguments() {
+    /**
+     * Print the arguments that the user should input from the command line.
+     */
+    private void printRequiredArguments() {
         System.out.println("downloadFile - The location of the file that contains URLS.");
         System.out.println("downloadLocation - The location where the files should be downloaded.");
         System.out.println("numberOfThreads - The number of threads to use in order to speed up the download process.");
         System.out.println("\nExample usage: java Downloader.java C:/DL.txt" + " " + "C:/Video Downloads" + " 10");
+        System.exit(-1);
     }
 
     /**
      * Checks the arguments to make sure that there is the correct number of arguments and also supports using -v, --version, -h, and --help.
      * @param args The command line arguments: downloadFile downloadLocation numberOfThreads
      */
-    private static void checkArguments(String[] args) {
+    private void checkArguments(String[] args) {
         if(args.length > 0) {
             // Options - The usual command line options such as -h, --help for help and -v, --version for version.
             if (args[0].contentEquals("-h") || args[0].contentEquals("--help")) {
@@ -69,7 +80,7 @@ public class Downloader {
      * Checks that the arguments themselves are correct for what they need to do.
      * @param args The command line arguments: downloadFile downloadLocation numberOfThreads
      */
-    private static void checkForValidInputs(String[] args) {
+    private void checkForValidInputs(String[] args) {
         // Set the variables to the given arguments.
         downloadFile = args[0];
         downloadLocation = args[1];
@@ -99,10 +110,13 @@ public class Downloader {
         } else{ System.err.println("Error! Download location: " + downloadLocation + " does not exist or is not a directory. Exiting..."); System.exit(-1);  }
 
         System.out.println("Inputs have been verified.");
+        System.out.println("----------------------------------------------------------------------");
+
         System.out.println("Starting the download script with the following inputs: ");
         System.out.println("File location: " + downloadFile);
         System.out.println("Download location: " + downloadLocation);
         System.out.println("Number of threads: " + numberOfThreads);
+        System.out.println("----------------------------------------------------------------------");
     }
 
     /**
@@ -113,16 +127,16 @@ public class Downloader {
      * ie. numberOfThreads is a number above 0 but less than or equal to the maximum number of threads your cpu supports.
      * @param args The command line arguments: downloadFile downloadLocation numberOfThreads
      */
-    public static void setup(String[] args) {
+    public void setup(String[] args) {
         checkArguments(args);
 
-        YOUTUBE_DL_LOCATION = System.getProperty("user.dir") + "\\Youtubedl\\youtube-dl.exe";
+        YOUTUBE_DL_LOCATION = System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\Youtubedl\\youtube-dl.exe";
         YOUTUBE_DL_LOCATION = YOUTUBE_DL_LOCATION.replace("\\", "/");
 
-        PHANTOM_JS_LOCATION = System.getProperty("user.dir") + "\\PhantomJS\\bin\\phantomjs.exe";
+        PHANTOM_JS_LOCATION = System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\PhantomJS\\bin\\phantomjs.exe";
         PHANTOM_JS_LOCATION = PHANTOM_JS_LOCATION.replace("\\", "/");
 
-        ARIA_2C_LOCATION = System.getProperty("user.dir") + "\\Aria2c\\aria2c.exe";
+        ARIA_2C_LOCATION = System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\Aria2c\\aria2c.exe";
         ARIA_2C_LOCATION = ARIA_2C_LOCATION.replace("\\", "/");
     }
 
@@ -132,8 +146,8 @@ public class Downloader {
      * @param url The url that contains the media that needs to be downloaded.
      * @return A string that contains either the media url or the filename based on which command was run.
      */
-    private static String youtubedl(String command, String url) {
-        System.out.println("Running the command:" + command + " for url: " + url);
+    private String youtubedl(String command, String url) {
+        System.out.println("Running the command: youtube-dl" + command + " for url: " + url);
         StringBuilder standardOutputStringBuilder = new StringBuilder();
         StringBuilder errorStringBuilder = new StringBuilder();
 
@@ -164,7 +178,7 @@ public class Downloader {
      * @param url The url obtained from running youtube-dl.
      * @return The output of running the aria2c executable.
      */
-    private static String aria2c(String filename, String url) {
+    private String aria2c(String filename, String url) {
         StringBuilder standardOutputStringBuilder = new StringBuilder();
         StringBuilder errorStringBuilder = new StringBuilder();
 
@@ -195,18 +209,26 @@ public class Downloader {
      * 3. Downloads the file using aria2c into the location specified by the command line argument downloadLocation.
      * @param unconvertedUrl
      */
-    private static void download(String unconvertedUrl) {
+    private void download(String unconvertedUrl) {
         String convertedUrl = youtubedl(" --get-url", unconvertedUrl);
         String filename = youtubedl(" --get-filename -o '%(title)s.%(ext)s' --restrict-filenames", unconvertedUrl).replace("\'", "");
 
-        System.out.println("Downloading: " + filename);
+        System.out.println("Downloading: " + filename + "\n\tFrom Unconverted URL: " + unconvertedUrl + "\n\tWith Converted URL: " + convertedUrl);
         //aria2c(filename, convertedUrl);
         //System.out.println(unconvertedUrl);
         //System.out.println(convertedUrl);
     }
 
     public static void main(String[] args) {
-        setup(args);
-        download("https://www.youtube.com/watch?v=dY6jR52fFWo");
+        Downloader downloader = new Downloader();
+        SQLiteDriver sqliteDriver = new SQLiteDriver();
+
+//        args = new String[3];
+//        args[0] = System.getProperty("user.dir") + "\\src\\main\\resources\\DLExample.txt";
+//        args[1] = System.getProperty("user.dir") + "\\src\\main\\resources\\downloads";
+//        args[2] = String.valueOf(2);
+
+        downloader.setup(args);
+        downloader.download("https://www.youtube.com/watch?v=dY6jR52fFWo");
     }
 }
