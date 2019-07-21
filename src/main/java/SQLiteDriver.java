@@ -19,13 +19,19 @@ public class SQLiteDriver {
             " CONVERTED_URL  NTEXT      NOT NULL, " +
             " DOWNLOADED  BIT      NOT NULL )";
 
+    private String createDownloadEntry = "INSERT INTO ";
+
+    public SQLiteDriver() {
+        createTable();
+    }
+
     /**
      * Creates a table with the following columns: ID, NAME, URL, CONVERTED_URL, DOWNLOADED.
      */
     public void createTable() {
         try {
             // Initialize a connection to the database.
-            connection = DriverManager.getConnection("jdbc:sqlite:downloads.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/downloads.db");
 
             preparedStatement = connection.prepareStatement(createTableStatement);
             preparedStatement.executeUpdate();
@@ -44,9 +50,9 @@ public class SQLiteDriver {
         } catch (Exception e) { System.exit(0); }
     }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        SQLiteDriver sDriver = new SQLiteDriver();
 //        sDriver.createTable();
 //        sDriver.closeConnections();
-    }
+//    }
 }

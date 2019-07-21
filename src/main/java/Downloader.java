@@ -184,7 +184,15 @@ public class Downloader {
 
         try {
             Runtime rt = Runtime.getRuntime();
-            Process process = rt.exec("cmd /c " + "\"" + ARIA_2C_LOCATION + "\"" + " --auto-file-renaming=false -c -x5 -j7 -s5 -o " + filename + " -d " + downloadLocation + url);
+            // Have to wrap the whole cmd command with double quotes in order to be able to use a file path that contains spaces between words and to use arguments.
+            // aria2c -l "downloadLocation" --auto-file-renaming=false -c -x5 -j7 -s5 -o "filename" -d "downloadLocation" "url"
+            // cmd /c ""ARIA_2C_LOCATION" -l "youtube-dl-aria2c\src\main\resources\downloads\log.txt" --auto-file-renaming=false -c -x5 -j7 -s5 -o "Google Homepage.html" -d "youtube-dl-aria2c\src\main\resources\downloads" "https://google.com""
+            String command = "cmd /c " + "\"" + "\"" + ARIA_2C_LOCATION + "\""
+                    + " -l " + "\"" + downloadLocation + "\\" + "log.txt" + "\""
+                    + " --auto-file-renaming=false -c -x5 -j7 -s5 -o " + "\"" + filename + "\""
+                    + " -d " + "\"" + downloadLocation + "\"" + " " + "\"" + url + "\"" + "\"";
+            System.out.println(command);
+            Process process = rt.exec(command);
             InputStream stdin = process.getInputStream();
             InputStreamReader isr = new InputStreamReader(stdin);
             BufferedReader br = new BufferedReader(isr);
@@ -194,11 +202,20 @@ public class Downloader {
             BufferedReader errorReader = new BufferedReader(esr);
 
             String line = null;
-            while ( (line = br.readLine()) != null) { standardOutputStringBuilder.append(line); }
-            while ( (line = errorReader.readLine()) != null) { errorStringBuilder.append(line); }
-        } catch (IOException e) { System.out.println("Could not find the executable."); }
+            while ( (line = br.readLine()) != null) {
+                if(line.contains("error")) { return "Failed"; }
+                System.out.println(line);
+                standardOutputStringBuilder.append(line);
+            }
+            while ( (line = errorReader.readLine()) != null) {
+                if(line.contains("error")) { return "Failed"; }
+                System.out.println(line);
+                errorStringBuilder.append(line);
+            }
+        } catch (IOException e) { System.out.println("Could not find the executable."); return "Failed"; }
 
-        return standardOutputStringBuilder.toString();
+        //return standardOutputStringBuilder.toString();
+        return "Succeeded";
     }
 
     /**
@@ -207,28 +224,34 @@ public class Downloader {
      * 2. Uses youtube-dl to find the human readable filename that is displayed on the web page then makes sure that it is in the format title-mediaID and restricts filenames to
      * only ASCII characters, and avoid "&" and spaces in filenames.
      * 3. Downloads the file using aria2c into the location specified by the command line argument downloadLocation.
-     * @param unconvertedUrl
+     * @param unconvertedUrl This is the URL that the user copied into the downloadFile.
      */
     private void download(String unconvertedUrl) {
+//        if(video exists in database) {
+//            // Skip downloading.
+//        }
+
         String convertedUrl = youtubedl(" --get-url", unconvertedUrl);
         String filename = youtubedl(" --get-filename -o '%(title)s.%(ext)s' --restrict-filenames", unconvertedUrl).replace("\'", "");
+        String success = aria2c(filename, convertedUrl);
 
-        System.out.println("Downloading: " + filename + "\n\tFrom Unconverted URL: " + unconvertedUrl + "\n\tWith Converted URL: " + convertedUrl);
-        //aria2c(filename, convertedUrl);
-        //System.out.println(unconvertedUrl);
-        //System.out.println(convertedUrl);
+        System.out.println("Downloading: " + filename + "\n\tFrom Unconverted URL: " + unconvertedUrl + "\n\tWith Converted URL: " + convertedUrl + "\n\t" + success);
+
+//        if(success.contentEquals("Succeeded")) {
+//            // Update the database with the unconvertedUrl, convertedUrl, filename, and success status
+//        }
     }
 
     public static void main(String[] args) {
         Downloader downloader = new Downloader();
         SQLiteDriver sqliteDriver = new SQLiteDriver();
 
-//        args = new String[3];
-//        args[0] = System.getProperty("user.dir") + "\\src\\main\\resources\\DLExample.txt";
-//        args[1] = System.getProperty("user.dir") + "\\src\\main\\resources\\downloads";
-//        args[2] = String.valueOf(2);
+        args = new String[3];
+        args[0] = System.getProperty("user.dir") + "\\src\\main\\resources\\DLExample.txt";
+        args[1] = System.getProperty("user.dir") + "\\src\\main\\resources\\downloads";
+        args[2] = String.valueOf(2);
 
         downloader.setup(args);
-        downloader.download("https://www.youtube.com/watch?v=dY6jR52fFWo");
+        downloader.download("https://vimeo.com/70774457");
     }
 }
