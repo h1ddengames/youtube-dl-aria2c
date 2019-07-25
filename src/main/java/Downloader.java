@@ -267,12 +267,12 @@ public class Downloader {
         // downloader.download("https://vimeo.com/70774457");
 
         System.out.println("----------------------------------------------------------------------");
-        int i = 1;
+
         for(String url : getUrlsToDownload()) {
-            System.out.println("Download " +  i + ")");
-            downloader.download(url);
+            new Thread(() -> {
+                downloader.download(url);
+            }).start();
             System.out.println("----------------------------------------------------------------------");
-            i++;
         }
     }
 }
