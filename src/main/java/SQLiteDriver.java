@@ -31,7 +31,7 @@ public class SQLiteDriver {
     public void createTable() {
         try {
             // Initialize a connection to the database.
-            connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/downloads.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:downloads.db");
 
             preparedStatement = connection.prepareStatement(createTableStatement);
             preparedStatement.executeUpdate();

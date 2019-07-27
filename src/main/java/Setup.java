@@ -2,6 +2,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class Setup {
+    private boolean isRunningAsJar = false;
+    public boolean isRunningAsJar() { return isRunningAsJar; }
+
     /**
      * Sets up the location of the executables that are needed to download the media.
      * Sets up the arrayList to contain the data stored within the downloadFile.
@@ -17,14 +20,62 @@ public class Setup {
      */
     private void setupExecutablePath() {
         System.out.println("Setting location of executables: setupExecutablePath()...");
-        Downloader.setYoutubeDLLocation(System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\Youtubedl\\youtube-dl.exe");
-        Downloader.setYoutubeDLLocation(Downloader.getYoutubeDLLocation().replace("\\", "/"));
+        //Downloader.setYoutubeDLLocation(System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\Youtubedl\\youtube-dl.exe");
+        //Downloader.setYoutubeDLLocation(Downloader.getYoutubeDLLocation().replace("\\", "/"));
 
-        Downloader.setPhantomJsLocation(System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\PhantomJS\\bin\\phantomjs.exe");
-        Downloader.setPhantomJsLocation(Downloader.getPhantomJsLocation().replace("\\", "/"));
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
-        Downloader.setAria2cLocation(System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\Aria2c\\aria2c.exe");
-        Downloader.setAria2cLocation(Downloader.getAria2cLocation().replace("\\", "/"));
+        try {
+            String url = classLoader.getResource("programs/Youtubedl/youtube-dl.exe").getFile();
+            url = url.replace("%20", " ");
+            // If the url contains jar in it that means that this script was run from
+            // the command line using the jar distribution. In order to use the executables packaged within
+            // the files need to be unpacked using the command "jar xf Downloader.jar programs"
+            // The above command extracts only the programs folder from the Downloader.jar jar.
+            // The name Downloader.jar will always be the same.
+            // Only the folder containing the version number will change.
+            if(url.contains("jar")){
+                ProcessBuilder builder = new ProcessBuilder(
+                        "cmd.exe", "/c", "jar xf Downloader.jar programs"
+                );
+                builder.redirectErrorStream(true);
+                builder.start();
+                url = "programs/Youtubedl/youtube-dl.exe";
+                isRunningAsJar = true;
+            }
+            System.out.println("\t\t-Youtube-DL location: " + url);
+            Downloader.setYoutubeDLLocation(url);
+            //Downloader.setYoutubeDLLocation(Downloader.getYoutubeDLLocation().replace("\\", "/"));
+        } catch (Exception e) { e.printStackTrace(); }
+
+        //Downloader.setPhantomJsLocation(System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\PhantomJS\\bin\\phantomjs.exe");
+        //Downloader.setPhantomJsLocation(Downloader.getPhantomJsLocation().replace("\\", "/"));
+
+        try {
+            String url = classLoader.getResource("programs/PhantomJS/bin/phantomjs.exe").getFile();
+            url = url.replace("%20", " ");
+            if(url.contains("jar")){
+                url = "programs/PhantomJS/bin/phantomjs.exe";
+            }
+            System.out.println("\t\t-Phantomjs location: " + url);
+            Downloader.setPhantomJsLocation(url);
+            //Downloader.setPhantomJsLocation(Downloader.getPhantomJsLocation().replace("\\", "/"));
+        } catch (Exception e) { e.printStackTrace(); }
+
+        //Downloader.setAria2cLocation(System.getProperty("user.dir") + "\\src\\main\\resources\\programs\\Aria2c\\aria2c.exe");
+        //Downloader.setAria2cLocation(Downloader.getAria2cLocation().replace("\\", "/"));
+
+        try {
+            String url = classLoader.getResource("programs/Aria2c/aria2c.exe").getFile();
+            url = url.replace("%20", " ");
+            if(url.contains("jar")){
+                url = "programs/Aria2c/aria2c.exe";
+            }
+            System.out.println("\t\t-Aria2c location: " + url);
+            Downloader.setAria2cLocation(url);
+            //Downloader.setAria2cLocation(Downloader.getAria2cLocation().replace("\\", "/"));
+        } catch (Exception e) { e.printStackTrace(); }
+
         System.out.println("\t- Executable path has been set.");
     }
 

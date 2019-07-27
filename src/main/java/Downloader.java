@@ -13,7 +13,7 @@ import java.util.List;
  * 5 - A number between 1 and the maximum number of threads your cpu allows.
  */
 public class Downloader {
-    private static String scriptVersion = "0.9a";
+    private static String scriptVersion = "1.0a";
     // The .txt file containing a single URL on each line.
     // Look at DLExample.txt in the /resources folder for an example.
     private static String downloadFile;
@@ -174,23 +174,32 @@ public class Downloader {
 
         try {
             // Get converted URL: youtube-dl --get-url url
-            System.out.println("Running the following command: " + "cmd.exe" + " /c " +
-                    getYoutubeDLProcess()
-                            .replace(" command", getYoutubeDLGetURLCommand())
-                            .replace(" url", unconvertedURL));
-            ProcessBuilder builder = new ProcessBuilder(
-                    "cmd.exe", "/c",
-                    getYoutubeDLProcess()
-                            .replace(" command", getYoutubeDLGetURLCommand())
-                            .replace(" url", unconvertedURL)
-            );
+            System.out.println("Running youtube-dl --get-url " + unconvertedURL);
+            ProcessBuilder builder;
+            if(setup.isRunningAsJar()) {
+                builder = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        getYoutubeDLProcess()
+                                .replace(" command", getYoutubeDLGetURLCommand())
+                                .replace(" url", unconvertedURL)
+                );
+            } else {
+                builder = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        getYoutubeDLProcess()
+                                .replace(" command", getYoutubeDLGetURLCommand())
+                                .replace(" url", unconvertedURL)
+                                .replaceFirst("/", "")
+                );
+            }
+
             builder.redirectErrorStream(true);
             Process process = builder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while (true) {
                 line = reader.readLine();
-                if(line.contains("http")) {
+                if(line != null && line.contains("http")) {
                     convertedURL = line;
                     System.out.println("Converted URL: " + convertedURL);
                     break;
@@ -198,41 +207,58 @@ public class Downloader {
             }
 
             // Get filename: youtube-dl --get-filename -o '%(title)s.%(ext)s' --restrict-filenames url
-            System.out.println("Running the following command: " + "cmd.exe" + " /c " +
-                    getYoutubeDLProcess()
-                            .replace(" command", getYoutubeDLGetFilenameCommand())
-                            .replace(" url", unconvertedURL));
-            builder = new ProcessBuilder(
-                    "cmd.exe", "/c",
-                    getYoutubeDLProcess()
-                            .replace(" command", getYoutubeDLGetFilenameCommand())
-                            .replace(" url", unconvertedURL)
-            );
+            System.out.println("youtube-dl --get-filename -o '%(title)s.%(ext)s' --restrict-filenames " + unconvertedURL);
+            if(setup.isRunningAsJar()) {
+                builder = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        getYoutubeDLProcess()
+                                .replace(" command", getYoutubeDLGetFilenameCommand())
+                                .replace(" url", unconvertedURL)
+                );
+            } else {
+                builder = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        getYoutubeDLProcess()
+                                .replace(" command", getYoutubeDLGetFilenameCommand())
+                                .replace(" url", unconvertedURL)
+                                .replaceFirst("/", "")
+                );
+            }
+
             process = builder.start();
             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             while (true) {
                 line = reader.readLine();
-                if(line.contains("mp3") || line.contains("mp4") || line.contains("3gp") ||
+                if(line != null && (line.contains("mp3") || line.contains("mp4") || line.contains("3gp") ||
                         line.contains("ogg") || line.contains("wmv") || line.contains("webm") ||
-                        line.contains("flv") || line.contains("avi") || line.contains("wav")) {
+                        line.contains("flv") || line.contains("avi") || line.contains("wav"))) {
 
-                    filename = line;
+                    filename = line.replace("\'", "");
                     System.out.println("Filename: " + filename);
                     break;
                 }
             }
 
             // aria2c -l "downloadLocation" --auto-file-renaming=false -c -x5 -j7 -s5 -o "filename" -d "downloadLocation" "url"
-            System.out.println("Running the following command: " + "cmd.exe" + " /c " +
-                    getAria2cProcess()
-                            .replace("filename", filename)
-                            .replace("url", convertedURL));
-            builder = new ProcessBuilder(
-                    "cmd.exe", "/c",
-                    getAria2cProcess()
-                            .replace("filename", filename)
-                            .replace("url", convertedURL)
-            );
+            System.out.println("aria2c -l " + downloadLocation
+                    + " --auto-file-renaming=false -c -x5 -j7 -s5 -o "
+                    + filename + " -d " + downloadLocation +  convertedURL);
+            if(setup.isRunningAsJar()) {
+                builder = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        getAria2cProcess()
+                                .replace("filename", filename)
+                                .replace("url", convertedURL)
+                );
+            } else {
+                builder = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        getAria2cProcess()
+                                .replace("filename", filename)
+                                .replace("url", convertedURL)
+                                .replaceFirst("/", "")
+                );
+            }
 
             process = builder.start();
             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -253,7 +279,31 @@ public class Downloader {
         }
     }
 
+    public Downloader() {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        File file;
+
+        try {
+            String url = classLoader.getResource("programs/Aria2c/aria2c.exe").getFile();
+            url = url.replace("%20", " ");
+            System.out.println(url);
+
+            file = new File(url);
+
+//            FileReader reader = new FileReader(file);
+//            BufferedReader br = new BufferedReader(reader);
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                System.out.println(line);
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
+//        System.out.println(System.getProperty("user.dir"));
+//        Downloader downloader = new Downloader();
         if(args.length == 0) {
             args = new String[3];
             args[0] = System.getProperty("user.dir") + "\\src\\main\\resources\\DLExample.txt";
@@ -274,5 +324,33 @@ public class Downloader {
             }).start();
             System.out.println("----------------------------------------------------------------------");
         }
+
+//        try {
+//            Setup setup = new Setup();
+//            System.out.println("------------------------------------------------------");
+//            System.out.println(getYoutubeDLProcess()
+//                    .replace(" command", getYoutubeDLGetURLCommand())
+//                    .replace(" url", "https://vimeo.com/70774457")
+//                    .replaceFirst("/", ""));
+//            ProcessBuilder builder = new ProcessBuilder(
+//                    "cmd.exe", "/c",
+//                    getYoutubeDLProcess()
+//                            .replace(" command", getYoutubeDLGetURLCommand())
+//                            .replace(" url", "https://vimeo.com/70774457")
+//                            .replaceFirst("/", "")
+//            );
+//            builder.redirectErrorStream(true);
+//            Process process = builder.start();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//            String line;
+//            while (true) {
+//                line = reader.readLine();
+//                if (line == null) { break; }
+//                System.out.println(line);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
     }
 }
